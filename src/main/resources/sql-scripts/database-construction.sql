@@ -21,6 +21,7 @@ CREATE TABLE public.employee
 (
     id integer NOT NULL,
     name character varying(30) NOT NULL,
+    income numeric(5, 2) NOT NULL DEFAULT 0.00,
     department_id integer NOT NULL,
     CONSTRAINT pk_employee_id PRIMARY KEY (id),
     CONSTRAINT fk_employee_department_id FOREIGN KEY (department_id)

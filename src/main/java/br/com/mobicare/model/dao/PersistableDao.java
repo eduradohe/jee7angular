@@ -6,18 +6,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import br.com.mobicare.model.entities.Employee;
+import br.com.mobicare.model.entities.Persistable;
 import br.com.mobicare.model.util.PersistenceUtil;
 
-public class HibernateEmployeeDao implements EmployeeDao {
-
-	public void save( final Employee employee ) {
-		
+public interface PersistableDao<P extends Persistable> {
+	
+	public default void save ( final P p ) {
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
 			em.getTransaction();
-			em.persist(employee);
+			em.persist(p);
 			em.getTransaction().commit();
 			
 		} catch ( final Throwable t ) {
@@ -29,13 +28,13 @@ public class HibernateEmployeeDao implements EmployeeDao {
 		}
 	}
 	
-	public void update( final Employee employee ) {
+	public default void update ( final P p ) {
 		
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
 			em.getTransaction();
-			em.merge(employee);
+			em.merge(p);
 			em.getTransaction().commit();
 			
 		} catch ( final Throwable t ) {
@@ -46,14 +45,15 @@ public class HibernateEmployeeDao implements EmployeeDao {
 			em.close();
 		}
 	}
-
-	public void delete( final Employee employee ) {
+	
+	
+	public default void delete ( final P p ) {
 		
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
 			em.getTransaction();
-			em.remove(employee);
+			em.remove(p);
 			em.getTransaction().commit();
 			
 		} catch ( final Throwable t ) {
@@ -64,19 +64,19 @@ public class HibernateEmployeeDao implements EmployeeDao {
 			em.close();
 		}
 	}
-
-	public List<Employee> list() {
-
+	
+	public default List<P> list ( final Class<P> clazz ) {
+		
 		final EntityManager em = PersistenceUtil.getEntityManager();
-		List<Employee> employees = null;
+		List<P> ps = null;
 		
 		try {
 			
-			CriteriaQuery<Employee> query = em.getCriteriaBuilder().createQuery(Employee.class);
-			Root<Employee> root = query.from(Employee.class);
+			CriteriaQuery<P> query = em.getCriteriaBuilder().createQuery(clazz);
+			Root<P> root = query.from(clazz);
 			query.select(root);
 			
-			employees = em.createQuery( query ).getResultList();
+			ps = em.createQuery( query ).getResultList();
 			
 		} catch ( final Throwable t ) {
 			
@@ -86,6 +86,32 @@ public class HibernateEmployeeDao implements EmployeeDao {
 			em.close();
 		}
 		
-		return employees;
+		return ps;
 	}
+	
+	public default Long count ( final Class<P> clazz ) {
+		
+		final EntityManager em = PersistenceUtil.getEntityManager();
+		Long count = null;
+		
+		try {
+			
+			CriteriaQuery<Long> query = em.getCriteriaBuilder().createQuery(Long.class);
+			Root<P> root = query.from(clazz);
+			query.select(em.getCriteriaBuilder().count(root));
+			
+			count = em.createQuery( query ).getSingleResult();
+			
+		} catch ( final Throwable t ) {
+			
+			throw new RuntimeException("An error occurred while getting count.", t);
+			
+		} finally {
+			em.close();
+		}
+		
+		return count;
+	}
+	
+	public P get ( final P p );
 }

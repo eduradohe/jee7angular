@@ -2,11 +2,17 @@ package br.com.mobicare.model.entities;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table
-public class Department {
+public class Department implements Persistable {
 	
 	@Id
 	@GeneratedValue
@@ -15,6 +21,8 @@ public class Department {
 	private String name;
 	private Double budget;
 	
+	@Transient
+	@OneToMany(mappedBy="department",cascade=CascadeType.PERSIST)
 	private List<Employee> employees;
 	
 	public Department() {

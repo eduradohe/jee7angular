@@ -4,13 +4,13 @@ import javax.persistence.*;
 
 @Entity
 @Table
-public class Employee {
+public class Employee implements Persistable {
 
 	@Id
 	@GeneratedValue
 	private Integer id;
 	
-	private Integer name;
+	private String name;
 	
 	private Double income;
 	
@@ -29,11 +29,11 @@ public class Employee {
 		this.id = id;
 	}
 
-	public Integer getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(Integer name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -78,6 +78,4 @@ public class Employee {
 		
 		return true;
 	}
-	
-	
 }

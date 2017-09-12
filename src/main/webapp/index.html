@@ -19,13 +19,13 @@
 <br>
 
 <div class="grid">
-	<div ng-controller="employeesList">
-		<div class="gridStyle" ng-grid="gridOptions"></div>
-		
-		<pagination direction-links="true" boundary-links="true"
-					 total-items="0" page="1" items-per-page="1"
-					 on-select-page="refreshGrid()">
-		</pagination>
+    <div ng-controller="employeesList">
+        <div class="gridStyle" ng-grid="gridOptions"></div>
+ 
+        <pagination direction-links="true" boundary-links="true"
+                    total-items="employees.totalResults" page="employees.currentPage" items-per-page="employees.pageSize"
+                    on-select-page="refreshGrid(page)">
+        </pagination>
 	</div>
 </div>
 

@@ -13,11 +13,6 @@
 
 	<web>
 		<link target="/">
-			<dir name="C:/Users/eduar/eclipse-workspace/JavaPlenoEduardoTurella/JavaPlenoEduardoTurella/WebContent">
-				<exclude name="/"/>
-			</dir>
-		</link>
-		<link target="/">
 			<dir name="C:/Users/eduar/eclipse-workspace/JavaPlenoEduardoTurella/JavaPlenoEduardoTurella/src/main/webapp">
 			</dir>
 		</link>

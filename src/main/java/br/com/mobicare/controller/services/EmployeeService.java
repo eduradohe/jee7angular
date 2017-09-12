@@ -11,19 +11,43 @@ import javax.ws.rs.core.MediaType;
 import br.com.mobicare.model.dao.DaoFactory;
 import br.com.mobicare.model.dao.PersistableDao;
 import br.com.mobicare.model.entities.Employee;
+import br.com.mobicare.view.services.MobicareApiResponse;
+import br.com.mobicare.view.util.ApiUtils;
 
 @Stateless
-@Path("services")
+@Path("employees")
 public class EmployeeService {
 	
 	@GET
-	@Path("employees")
+	@Path("list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Employee> listEmployees() {
+	public MobicareApiResponse<List<Employee>> list() {
 		
 		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
 		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
 		
-		return dao.list(Employee.class);
+		return ApiUtils.wrappResponse(dao.list(Employee.class));
+	}
+	
+	@GET
+	@Path("count")
+	@Produces(MediaType.APPLICATION_JSON)
+	public MobicareApiResponse<Long> count() {
+		
+		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
+		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
+		
+		return ApiUtils.wrappResponse(dao.count(Employee.class));
+	}
+	
+	@GET
+	@Path("listWithinRange")
+	@Produces(MediaType.APPLICATION_JSON)
+	public MobicareApiResponse<List<Employee>> listWithinRange() {
+		
+		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
+		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
+		
+		return ApiUtils.wrappResponse(dao.list(Employee.class));
 	}
 }

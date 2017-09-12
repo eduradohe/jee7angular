@@ -67,6 +67,11 @@ public interface PersistableDao<P extends Persistable> {
 	
 	public default List<P> list ( final Class<P> clazz ) {
 		
+		return this.list( clazz, -1, -1 );
+	}
+	
+	public default List<P> list ( final Class<P> clazz, final Integer offset, final Integer limit ) {
+		
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		List<P> ps = null;
 		
@@ -76,7 +81,11 @@ public interface PersistableDao<P extends Persistable> {
 			Root<P> root = query.from(clazz);
 			query.select(root);
 			
-			ps = em.createQuery( query ).getResultList();
+			if ( offset < 0 || limit < 0 ) {
+				ps = em.createQuery( query ).getResultList();
+			} else {
+				ps = em.createQuery( query ).setFirstResult(offset).setMaxResults(limit).getResultList();
+			}
 			
 		} catch ( final Throwable t ) {
 			

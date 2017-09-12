@@ -1,9 +1,11 @@
 package br.com.mobicare.model.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 import br.com.mobicare.model.entities.Persistable;
@@ -67,10 +69,10 @@ public interface PersistableDao<P extends Persistable> {
 	
 	public default List<P> list ( final Class<P> clazz ) {
 		
-		return this.list( clazz, -1, -1 );
+		return this.list( clazz, null, null, null, null );
 	}
 	
-	public default List<P> list ( final Class<P> clazz, final Integer offset, final Integer limit ) {
+	public default List<P> list ( final Class<P> clazz, final Integer offset, final Integer limit, final String sortFields, final String sortDirections ) {
 		
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		List<P> ps = null;
@@ -81,9 +83,27 @@ public interface PersistableDao<P extends Persistable> {
 			Root<P> root = query.from(clazz);
 			query.select(root);
 			
-			if ( offset < 0 || limit < 0 ) {
+			if ( offset == null || limit == null ) {
 				ps = em.createQuery( query ).getResultList();
 			} else {
+				if ( sortFields != null && sortDirections != null ) {
+					final List<Order> orderList = new ArrayList<Order>();
+					
+					final String[] fields = sortFields.contains(",") ? sortFields.split(",") : sortFields.split(";");
+					final String[] directions = sortDirections.contains(",") ? sortDirections.split(",") : sortDirections.split(";");
+					
+					for ( int i = 0; i < fields.length; i++ ) {
+						
+						if ( "asc".equals(directions[i]) ) {
+							orderList.add(em.getCriteriaBuilder().asc(root.get(fields[i])));
+						} else {
+							orderList.add(em.getCriteriaBuilder().desc(root.get(fields[i])));
+						}
+						
+						query.orderBy(orderList);
+					}
+				}
+				
 				ps = em.createQuery( query ).setFirstResult(offset).setMaxResults(limit).getResultList();
 			}
 			

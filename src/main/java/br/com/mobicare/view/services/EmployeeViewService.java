@@ -1,6 +1,7 @@
 package br.com.mobicare.view.services;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.DefaultValue;
@@ -37,11 +38,16 @@ public class EmployeeViewService {
 		wrapper.setSortDirections(sortDirections);
 		wrapper.setPageSize(5);
 		
-		final List<Employee> employees = ApiUtils.callService("api/employees/list");
-		final Integer total = ApiUtils.callService("api/employees/count");
+		final Integer start = (wrapper.getCurrentPage() - 1) * wrapper.getPageSize();
 		
-		wrapper.setList(employees);
-		wrapper.setTotalResults(total.intValue());
+		final Map<String,Object[]> parameters = new HashMap<String,Object[]>();
+		parameters.put("start", new Object[] { start });
+		parameters.put("pageSize", new Object[] { wrapper.getPageSize() });
+		parameters.put("sortFields", new Object[] { wrapper.getSortFields() });
+		parameters.put("sortDirections", new Object[] { wrapper.getSortDirections() });
+		
+		wrapper.setList(ApiUtils.callService("api/employees/listWithinRange", parameters));
+		wrapper.setTotalResults(ApiUtils.callService("api/employees/count"));
 		
 		return wrapper;
 	}

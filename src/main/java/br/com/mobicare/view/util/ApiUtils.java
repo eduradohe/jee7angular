@@ -1,5 +1,8 @@
 package br.com.mobicare.view.util;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -17,18 +20,21 @@ public class ApiUtils {
 	
 	public static <T> T callService( final String path ) {
 		
-		return callService( path, (String[]) null );
+		return callService( path, null );
 	}
 	
-	public static <T> T callService( final String path, final String ... parameters  ) {
+	public static <T> T callService( final String path, final Map<String,Object[]> parameters  ) {
 		
 		final Client client = ClientBuilder.newClient();
-		final WebTarget target = client.target(API_CONTEXT + path);
-		final JsonObject response = target.request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+		WebTarget target = client.target(API_CONTEXT + path);
 		
 		if ( parameters != null ) {
-			// TODO 
+			for ( final Entry<String, Object[]> entry : parameters.entrySet() ) {
+				target = target.queryParam(entry.getKey(), entry.getValue());
+			}
 		}
+		
+		final JsonObject response = target.request(MediaType.APPLICATION_JSON).get(JsonObject.class);
 		
 		return parseJsonToList(response);
 	}

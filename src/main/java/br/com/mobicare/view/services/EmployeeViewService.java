@@ -23,7 +23,7 @@ import br.com.mobicare.view.util.ViewUtils;
 public class EmployeeViewService {
 
 	@GET
-	@Path("employeesView")
+	@Path("employees")
 	@Produces(MediaType.APPLICATION_JSON)
 	public PaginatedListWrapper<Employee> listEmployees(@DefaultValue("1")
 													    @QueryParam("page")

@@ -42,7 +42,7 @@ app.controller('employeesList', function ($scope, employeeService) {
 app.service('employeeService', function ($http) {
     // Makes the REST request to get the data to populate the grid.
     this.getAll = function (page, sortFields, sortDirections) {
-        return $http.get('view/employeesView', {
+        return $http.get('api/view/employeesView', {
             params: {
                 page: page,
                 sortFields: sortFields,

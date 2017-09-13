@@ -35,3 +35,19 @@ WITH (
 
 ALTER TABLE public.employee
     OWNER to postgres;
+
+CREATE SEQUENCE public.employee_seq
+    INCREMENT 1
+    START 1
+;
+
+ALTER SEQUENCE public.employee_seq
+    OWNER TO postgres;
+
+CREATE SEQUENCE public.department_seq
+    INCREMENT 1
+    START 1
+;
+
+ALTER SEQUENCE public.department_seq
+    OWNER TO postgres;

@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Employee implements Persistable {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_gen")
+	@SequenceGenerator(name="employee_gen", sequenceName="employee_seq", initialValue=1, allocationSize=1)
 	private Integer id;
 	
 	private String name;

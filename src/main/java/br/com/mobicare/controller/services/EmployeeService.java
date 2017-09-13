@@ -3,9 +3,13 @@ package br.com.mobicare.controller.services;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -18,33 +22,32 @@ import br.com.mobicare.view.util.ApiUtils;
 
 @Stateless
 @Path("employees")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class EmployeeService {
 	
 	@GET
 	@Path("list")
-	@Produces(MediaType.APPLICATION_JSON)
 	public MobicareApiResponse<List<Employee>> list() {
 		
 		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
 		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
 		
-		return ApiUtils.wrappResponse(dao.list(Employee.class));
+		return ApiUtils.wrapResponse(dao.list(Employee.class));
 	}
 	
 	@GET
 	@Path("count")
-	@Produces(MediaType.APPLICATION_JSON)
 	public MobicareApiResponse<Long> count() {
 		
 		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
 		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
 		
-		return ApiUtils.wrappResponse(dao.count(Employee.class));
+		return ApiUtils.wrapResponse(dao.count(Employee.class));
 	}
 	
 	@GET
 	@Path("listWithinRange")
-	@Produces(MediaType.APPLICATION_JSON)
 	public MobicareApiResponse<List<Employee>> listWithinRange(@DefaultValue("1")
 															   @QueryParam("start")
 															   Integer start,
@@ -61,6 +64,56 @@ public class EmployeeService {
 		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
 		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
 		
-		return ApiUtils.wrappResponse(dao.list(Employee.class, start, pageSize, sortFields, sortDirections));
+		return ApiUtils.wrapResponse(dao.list(Employee.class, start, pageSize, sortFields, sortDirections));
+	}
+	
+	@GET
+	@Path("{id}")
+	public Employee get(@PathParam("id") Long id) {
+		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
+		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
+		
+		final Employee employee = new Employee();
+		employee.setId(id.intValue());
+		
+		return dao.get(employee);
+	}
+	
+	@POST
+	public Employee save(Employee employee) {
+		
+		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
+		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
+		
+		if ( employee.getId() == null ) {
+			
+			final Employee employeeToSave = new Employee();
+			employeeToSave.setName(employee.getName());
+			employeeToSave.setIncome(employee.getIncome());
+			employeeToSave.setDepartment(employee.getDepartment());
+			dao.save(employeeToSave);
+			employee = employeeToSave;
+			
+		} else {
+			
+			final Employee employeeToUpdate = get(Long.valueOf(employee.getId()));
+			employeeToUpdate.setName(employee.getName());
+			employeeToUpdate.setIncome(employee.getIncome());
+			employeeToUpdate.setDepartment(employee.getDepartment());
+			dao.update(employeeToUpdate);
+			employee = employeeToUpdate;
+		}
+		
+		return employee;
+	}
+	
+	@DELETE
+	@Path("{id}")
+	public void delete(@PathParam("id") Long id) {
+
+		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
+		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
+		
+		dao.delete(Employee.class, id.intValue());
 	}
 }

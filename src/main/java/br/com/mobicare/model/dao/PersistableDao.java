@@ -17,7 +17,7 @@ public interface PersistableDao<P extends Persistable> {
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
-			em.getTransaction();
+			em.getTransaction().begin();
 			em.persist(p);
 			em.getTransaction().commit();
 			
@@ -35,7 +35,7 @@ public interface PersistableDao<P extends Persistable> {
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
-			em.getTransaction();
+			em.getTransaction().begin();
 			em.merge(p);
 			em.getTransaction().commit();
 			
@@ -49,13 +49,16 @@ public interface PersistableDao<P extends Persistable> {
 	}
 	
 	
-	public default void delete ( final P p ) {
+	public default void delete ( final Class<P> clazz, final Integer id ) {
 		
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
-			em.getTransaction();
+			em.getTransaction().begin();
+			
+			final P p = em.find(clazz, id);
 			em.remove(p);
+			
 			em.getTransaction().commit();
 			
 		} catch ( final Throwable t ) {

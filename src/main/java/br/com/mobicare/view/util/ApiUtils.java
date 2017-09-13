@@ -18,12 +18,12 @@ public class ApiUtils {
 	
 	private static final String API_CONTEXT = "http://localhost:8080/java-pleno-eduardo-turella/";
 	
-	public static <T> T callService( final String path ) {
+	public static <T> T callGetService( final String path ) {
 		
-		return callService( path, null );
+		return callGetService( path, null );
 	}
 	
-	public static <T> T callService( final String path, final Map<String,Object[]> parameters  ) {
+	public static <T> T callGetService( final String path, final Map<String,Object[]> parameters  ) {
 		
 		final Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(API_CONTEXT + path);
@@ -36,10 +36,10 @@ public class ApiUtils {
 		
 		final JsonObject response = target.request(MediaType.APPLICATION_JSON).get(JsonObject.class);
 		
-		return parseJsonToList(response);
+		return parseContentFromJson(response);
 	}
 	
-	private static <T> T parseJsonToList( final JsonObject json ) {
+	private static <T> T parseContentFromJson( final JsonObject json ) {
 		
 		MobicareApiResponse<T> response = null;
 		
@@ -47,14 +47,16 @@ public class ApiUtils {
 		
 		try {
 			response = objectMapper.readValue(json.toString(), new TypeReference<MobicareApiResponse<T>>(){});
+			
 		} catch ( final Throwable t ) {
 			throw new RuntimeException("Error parsing JSON to list.", t);
 		}
 		
+		
 		return response.getContent();
 	}
 	
-	public static <T> MobicareApiResponse<T> wrappResponse( T content ) {
+	public static <T> MobicareApiResponse<T> wrapResponse( final T content ) {
 		
 		final MobicareApiResponse<T> response = new MobicareApiResponse<T>( content );
 		return response;

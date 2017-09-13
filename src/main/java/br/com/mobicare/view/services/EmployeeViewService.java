@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,12 +17,12 @@ import br.com.mobicare.view.util.ApiUtils;
 import br.com.mobicare.view.util.PaginatedListWrapper;
 
 @Stateless
-@Path("view/employees")
+@Path("employees")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class EmployeeViewService {
 
 	@GET
-	@Path("listPaginated")
-	@Produces(MediaType.APPLICATION_JSON)
 	public PaginatedListWrapper<Employee> listEmployees(@DefaultValue("1")
 													    @QueryParam("page")
 													    Integer page,
@@ -46,8 +47,8 @@ public class EmployeeViewService {
 		parameters.put("sortFields", new Object[] { wrapper.getSortFields() });
 		parameters.put("sortDirections", new Object[] { wrapper.getSortDirections() });
 		
-		wrapper.setList(ApiUtils.callService("api/employees/listWithinRange", parameters));
-		wrapper.setTotalResults(ApiUtils.callService("api/employees/count"));
+		wrapper.setList(ApiUtils.callGetService("resources/employees/listWithinRange", parameters));
+		wrapper.setTotalResults(ApiUtils.callGetService("resources/employees/count"));
 		
 		return wrapper;
 	}

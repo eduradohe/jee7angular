@@ -2,31 +2,104 @@
 
 <html ng-app="employees">
 	<head>
-		<title></title>
-		<script src="lib/angular.min.js"></script>
-		<script src="lib/jquery-1.9.1.js"></script>
-		<script src="lib/ui-bootstrap-0.10.0.min.js"></script>
-		<script src="lib/ng-grid.min.js"></script>
+		<title>Java Pleno Eduardo Turella - Mobicare MVC CRUD Challenge</title>
+		
+		<link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
+		
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		
+		<script src="lib/dependencies/angular.min.js"></script>
+		<script src="lib/dependencies/angular-resource.min.js"></script>
+		<script src="lib/dependencies/jquery.min.js"></script>
+		<script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+		<script src="lib/dependencies/ng-grid.min.js"></script>
 		
 		<script src="script/employee.js"></script>
 		
-		<link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css"/>
-		<link rel="stylesheet" type="text/css" href="lib/ng-grid.min.css"/>
-		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 	</head>
 	
 	<body>
-		<br>
 		
-		<div class="grid">
-			<div ng-controller="employeesList">
-				<div class="gridStyle" ng-grid="gridOptions"></div>
-				
-				<pagination direction-links="true" boundary-links="true"
-							total-items="employees.totalResults" page="employees.currentPage" items-per-page="employees.pageSize"
-							on-select-page="refreshGrid(page)">
-				</pagination>
+		<h1>Java Pleno Eduardo Turella - Mobicare MVC CRUD Challenge</h1>
+		
+		<br/>
+		
+		<div class="message" ng-controller="alertMessagesController">
+			<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+		</div>
+		
+		<div class="grid" ng-controller="employeesListController">
+			<div>
+				<h3>List Employees</h3>
 			</div>
+			
+			<div class="gridStyle" ng-grid="gridOptions"></div>
+			
+			<pagination direction-links="true" boundary-links="true"
+						total-items="employees.totalResults" items-per-page="employees.pageSize"
+						ng-model="employees.currentPage" ng-change="refreshGrid()">
+			</pagination>
+		</div>
+		
+		<div class="form" ng-controller="employeesFormController">
+			
+			<div ng-if="employee.id == null">
+				<h3>Add Employee</h3>
+			</div>
+			
+			<div ng-if="employee.id != null">
+				<h3>Edit Employee</h3>
+			</div>
+			
+			<div>
+				<form name="employeeForm" ng-submit="updateEmployee()" novalidate>
+					
+					<div class="form-group" ng-class="{'has-error' : employeeForm.name.$invalid && employeeForm.name.$dirty}">
+						<label for="name">Name:</label>
+						<span ng-class="{'glyphicon glyphicon-ok' : employeeForm.name.$valid && employeeForm.name.$dirty}"></span>
+						
+						<input id="name" name="name" type="text" class="form-control" maxlength="30"
+								ng-model="employee.name"
+								required ng-minlength="2" ng-maxlength="30"/>
+						
+						<p class="help-block" ng-show="employeeForm.name.$error.required">Add Name.</p>
+						<p class="help-block" ng-show="employeeForm.name.$error.minlength">Name must be at least 2 characters long.</p>
+						<p class="help-block" ng-show="employeeForm.name.$error.maxlength">Name cannot be longer than 30 characters.</p>
+					</div>
+					
+					<div class="form-group" ng-class="{'has-error' : employeeForm.income.$invalid && employeeForm.income.$dirty}">
+						<label for="income">Income:</label>
+						<span ng-class="{'glyphicon glyphicon-ok' : employeeForm.income.$valid && employeeForm.income.$dirty}"></span>
+						
+						<input id="income" name="income" type="number" class="form-control" maxlength="9"
+								ng-model="employee.income"
+								required ng-maxlength="8"/>
+						
+						<p class="help-block" ng-show="employeeForm.income.$error.required">Add Income.</p>
+						<p class="help-block" ng-show="employeeForm.income.$error.maxlength">Income cannot be longer than 9 digits.</p>
+					</div>
+					
+					<div class="form-group" ng-class="{'has-error' : employeeForm.department.$invalid && employeeForm.department.$dirty}">
+						<label for="department">Department:</label>
+						<span ng-class="{'glyphicon glyphicon-ok' : employeeForm.department.$valid && employeeForm.department.$dirty}"></span>
+						
+						<select id="department" name="department" class="form-control" 
+								ng-model="employee.department.id" required>
+							<option ng-repeat="departmentOption in comboDepartments" value="{{departmentOption.id}}">{{departmentOption.name}}</option>
+						</select>
+						
+						<p class="help-block" ng-show="employeeForm.department.$error.required">Select department.</p>
+					</div>
+					
+					<div class="buttons">
+						<button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
+						<button type="submit" class="btn btn-primary" ng-disabled="employeeForm.$invalid">Save</button>
+					</div>
+					
+				</form>
+			</div>
+			
 		</div>
 	
 	</body>

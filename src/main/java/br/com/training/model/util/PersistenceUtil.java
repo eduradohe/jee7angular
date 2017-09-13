@@ -20,7 +20,7 @@ public class PersistenceUtil {
 	public static synchronized EntityManagerFactory createEntityManagerFactory() {
 		
 		if ( factory == null || !factory.isOpen() ) {
-			factory = Persistence.createEntityManagerFactory("mobicare");
+			factory = Persistence.createEntityManagerFactory("myPU");
 		}
 		
 		return factory;

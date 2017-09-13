@@ -1,8 +1,8 @@
-package br.com.mobicare.model.dao;
+package br.com.training.model.dao;
 
-import br.com.mobicare.model.entities.Department;
-import br.com.mobicare.model.entities.Employee;
-import br.com.mobicare.model.entities.Persistable;
+import br.com.training.model.entities.Department;
+import br.com.training.model.entities.Employee;
+import br.com.training.model.entities.Persistable;
 
 public class DaoFactory {
 

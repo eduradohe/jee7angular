@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>com.br.mobicare</groupId>
-  <artifactId>java-pleno-eduardo-turella</artifactId>
+  <groupId>com.br.training</groupId>
+  <artifactId>jee7angular</artifactId>
   <version>1.0.0</version>
   <packaging>war</packaging>
   
-  <name>java-pleno-eduardo-turella</name>
+  <name>jee7angular</name>
   
   <prerequisites>
     <maven>3.1.0</maven>
@@ -50,7 +50,7 @@
             <version>${version.plugin.war}</version>
             <configuration>
                 <failOnMissingWebXml>false</failOnMissingWebXml>
-                <warName>java-pleno-eduardo-turella</warName>
+                <warName>jee7angular</warName>
             </configuration>
         </plugin>
         <plugin>
@@ -67,7 +67,7 @@
             <version>${version.plugin.wildfly}</version>
             <configuration>
                 <version>10.0.0.Final</version>
-                <filename>java-pleno-eduardo-turella.war</filename>
+                <filename>jee7angular.war</filename>
             </configuration>
         </plugin>
         <plugin>
@@ -86,8 +86,8 @@
                         <goal>deploy</goal>
                     </goals>
                     <configuration>
-                        <app>target/java-pleno-eduardo-turella.war</app>
-                        <contextRoot>java-pleno-eduardo-turella</contextRoot>
+                        <app>target/jee7angular.war</app>
+                        <contextRoot>jee7angular</contextRoot>
                     </configuration>
                 </execution>
             </executions>
@@ -112,7 +112,7 @@
                         org.hibernate.jpa.HibernatePersistenceProvider
                     </javax.persistence.provider>
                 </systemVariables>
-                <warFile>target/java-pleno-eduardo-turella.war</warFile>
+                <warFile>target/jee7angular.war</warFile>
             </configuration>
         </plugin>
     </plugins>

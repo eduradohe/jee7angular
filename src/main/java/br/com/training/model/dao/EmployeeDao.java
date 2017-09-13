@@ -1,12 +1,12 @@
-package br.com.mobicare.model.dao;
+package br.com.training.model.dao;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.mobicare.model.entities.Employee;
-import br.com.mobicare.model.util.PersistenceUtil;
+import br.com.training.model.entities.Employee;
+import br.com.training.model.util.PersistenceUtil;
 
 public class EmployeeDao implements Dao<Employee> {
 

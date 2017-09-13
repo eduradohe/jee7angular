@@ -1,4 +1,4 @@
-package br.com.mobicare.view.util;
+package br.com.training.view.util;
 
 import java.util.List;
 

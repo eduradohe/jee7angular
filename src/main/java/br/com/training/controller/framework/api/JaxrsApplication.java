@@ -1,4 +1,4 @@
-package br.com.mobicare.controller.framework.api;
+package br.com.training.controller.framework.api;
 
 import javax.ws.rs.core.Application;
 

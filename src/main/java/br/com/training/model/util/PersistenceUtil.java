@@ -1,4 +1,4 @@
-package br.com.mobicare.model.util;
+package br.com.training.model.util;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

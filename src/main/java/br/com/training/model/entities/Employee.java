@@ -1,4 +1,4 @@
-package br.com.mobicare.model.entities;
+package br.com.training.model.entities;
 
 import javax.persistence.*;
 

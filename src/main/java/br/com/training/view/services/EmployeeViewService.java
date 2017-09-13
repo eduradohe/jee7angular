@@ -1,4 +1,4 @@
-package br.com.mobicare.view.services;
+package br.com.training.view.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,18 +12,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import br.com.mobicare.controller.services.DepartmentService;
-import br.com.mobicare.model.entities.Department;
-import br.com.mobicare.view.util.PaginatedListWrapper;
+import br.com.training.controller.services.EmployeeService;
+import br.com.training.model.entities.Employee;
+import br.com.training.view.util.PaginatedListWrapper;
 
 @Stateless
-@Path("departments")
+@Path("employees")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class DepartmentViewService {
-
+public class EmployeeViewService {
+	
 	@GET
-	public PaginatedListWrapper<Department> listDepartments(@DefaultValue("1")
+	public PaginatedListWrapper<Employee> listEmployees(@DefaultValue("1")
 													    @QueryParam("page")
 													    Integer page,
 													    @DefaultValue("id")
@@ -33,7 +33,7 @@ public class DepartmentViewService {
 													    @QueryParam("sortDirections")
 													    String sortDirections) {
 		
-		final PaginatedListWrapper<Department> wrapper = new PaginatedListWrapper<>();
+		final PaginatedListWrapper<Employee> wrapper = new PaginatedListWrapper<>();
 		wrapper.setCurrentPage(page);
 		wrapper.setSortFields(sortFields);
 		wrapper.setSortDirections(sortDirections);
@@ -47,8 +47,8 @@ public class DepartmentViewService {
 		parameters.put("sortFields", new Object[] { wrapper.getSortFields() });
 		parameters.put("sortDirections", new Object[] { wrapper.getSortDirections() });
 		
-		wrapper.setList(new DepartmentService().listEmptyWithinRange(start, wrapper.getPageSize(), sortFields, sortDirections));
-		wrapper.setTotalResults(new DepartmentService().countEmpty().intValue());
+		wrapper.setList(new EmployeeService().listWithinRange(start, wrapper.getPageSize(), sortFields, sortDirections));
+		wrapper.setTotalResults(new EmployeeService().count().intValue());
 		
 		return wrapper;
 	}

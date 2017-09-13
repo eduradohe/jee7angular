@@ -1,4 +1,4 @@
-package br.com.mobicare.model.dao;
+package br.com.training.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
-import br.com.mobicare.model.entities.Persistable;
-import br.com.mobicare.model.util.PersistenceUtil;
+import br.com.training.model.entities.Persistable;
+import br.com.training.model.util.PersistenceUtil;
 
 public interface Dao<P extends Persistable> {
 	

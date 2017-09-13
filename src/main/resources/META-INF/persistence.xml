@@ -4,18 +4,18 @@
      http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
     version="2.0">
     
-	<persistence-unit name="mobicare">
+	<persistence-unit name="myPU">
 	
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
-		<class>br.com.mobicare.model.entities.Employee</class>
-		<class>br.com.mobicare.model.entities.Department</class>
+		<class>br.com.training.model.entities.Employee</class>
+		<class>br.com.training.model.entities.Department</class>
 		
 		<properties>
 		
 			<!-- Connection data -->
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/mobicare" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/myDB" />
 			<property name="javax.persistence.jdbc.user" value="postgres" />
 			<property name="javax.persistence.jdbc.password" value="admin123" />
 			

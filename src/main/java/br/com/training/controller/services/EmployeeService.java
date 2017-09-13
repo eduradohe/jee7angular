@@ -1,4 +1,4 @@
-package br.com.mobicare.controller.services;
+package br.com.training.controller.services;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import br.com.mobicare.model.dao.Dao;
-import br.com.mobicare.model.dao.DaoFactory;
-import br.com.mobicare.model.entities.Employee;
+import br.com.training.model.dao.Dao;
+import br.com.training.model.dao.DaoFactory;
+import br.com.training.model.entities.Employee;
 
 @Stateless
 @Path("employees")

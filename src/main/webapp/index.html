@@ -23,18 +23,16 @@
 		
 		<h1>Java Pleno Eduardo Turella - Mobicare MVC CRUD Challenge</h1>
 		
-		<br/>
-		
 		<div class="message" ng-controller="alertMessagesController">
 			<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 		</div>
 		
 		<div class="grid" ng-controller="employeesListController">
 			<div>
-				<h3>List Employees</h3>
+				<h3>Employees List</h3>
 			</div>
 			
-			<div class="gridStyle" ng-grid="gridOptions"></div>
+			<div class="gridStyle" ng-grid="employeesGrid"></div>
 			
 			<pagination direction-links="true" boundary-links="true"
 						total-items="employees.totalResults" items-per-page="employees.pageSize"
@@ -101,7 +99,20 @@
 			</div>
 			
 		</div>
-	
+		
+		<div class="grid" ng-controller="departmentsListController">
+			<div>
+				<h3>Empty Departments List</h3>
+			</div>
+			
+			<div class="gridStyle" ng-grid="departmentsGrid"></div>
+			
+			<pagination direction-links="true" boundary-links="true"
+						total-items="departments.totalResults" items-per-page="departments.pageSize"
+						ng-model="departments.currentPage" ng-change="refreshDepartmentsGrid()">
+			</pagination>
+		</div>
+		
 	</body>
 
 </html>

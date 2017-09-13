@@ -16,6 +16,7 @@ public class Employee implements Persistable {
 	private Double income;
 	
 	@ManyToOne
+	@JoinColumn(name = "department_id")
 	private Department department;
 	
 	public Employee() {

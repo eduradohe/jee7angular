@@ -9,14 +9,14 @@ import br.com.mobicare.model.entities.Persistable;
 public class DaoFactory<P extends Persistable> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public PersistableDao<P> getDao( Class<P> persistableClass ) {
+	public Dao<P> getDao( Class<P> persistableClass ) {
 		
 		final Reflections reflections = new Reflections("br.com.mobicare.model.dao");
-		final Set<Class<? extends PersistableDao>> classes = reflections.getSubTypesOf(PersistableDao.class);
+		final Set<Class<? extends Dao>> classes = reflections.getSubTypesOf(Dao.class);
 		
-		PersistableDao<P> dao = null;
+		Dao<P> dao = null;
 		
-		for ( final Class<? extends PersistableDao> clazz: classes ) {
+		for ( final Class<? extends Dao> clazz: classes ) {
 			
 			if ( persistableClass.getName().equals( clazz.getMethods()[0].getReturnType().getName() ) ) {
 				

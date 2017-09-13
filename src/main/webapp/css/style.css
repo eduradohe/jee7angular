@@ -5,17 +5,24 @@ body {
     text-align: center;
 }
 
+h1 {
+	position:relative;
+    text-align: center;
+}
+
 h3 {
     margin: 0 0 20px;
     text-align: left;
 }
 
 .message {
+	position:relative;
     margin-left: 5%;
     margin-right: 5%;
 }
 
 .grid {
+	position:relative;
     width: 40%;
     float: left;
     margin-left: 5%;
@@ -35,6 +42,7 @@ h3 {
 }
 
 .form {
+	position:relative;
     width: 40%;
     float: right;
     margin-left: 5%;

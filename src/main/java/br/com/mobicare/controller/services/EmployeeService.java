@@ -14,11 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import br.com.mobicare.model.dao.Dao;
 import br.com.mobicare.model.dao.DaoFactory;
-import br.com.mobicare.model.dao.PersistableDao;
 import br.com.mobicare.model.entities.Employee;
-import br.com.mobicare.view.services.MobicareApiResponse;
-import br.com.mobicare.view.util.ApiUtils;
 
 @Stateless
 @Path("employees")
@@ -26,29 +24,26 @@ import br.com.mobicare.view.util.ApiUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class EmployeeService {
 	
+	final DaoFactory<Employee> factory = new DaoFactory<Employee>();
+	final Dao<Employee> dao = factory.getDao(Employee.class);
+	
 	@GET
 	@Path("list")
-	public MobicareApiResponse<List<Employee>> list() {
+	public List<Employee> list() {
 		
-		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
-		
-		return ApiUtils.wrapResponse(dao.list(Employee.class));
+		return dao.list(Employee.class);
 	}
 	
 	@GET
 	@Path("count")
-	public MobicareApiResponse<Long> count() {
+	public Long count() {
 		
-		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
-		
-		return ApiUtils.wrapResponse(dao.count(Employee.class));
+		return dao.count(Employee.class);
 	}
 	
 	@GET
 	@Path("listWithinRange")
-	public MobicareApiResponse<List<Employee>> listWithinRange(@DefaultValue("1")
+	public List<Employee> listWithinRange(@DefaultValue("1")
 															   @QueryParam("start")
 															   Integer start,
 															   @DefaultValue("5")
@@ -61,17 +56,12 @@ public class EmployeeService {
 															   @QueryParam("sortDirections")
 															   String sortDirections) {
 		
-		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
-		
-		return ApiUtils.wrapResponse(dao.list(Employee.class, start, pageSize, sortFields, sortDirections));
+		return dao.list(Employee.class, start, pageSize, sortFields, sortDirections);
 	}
 	
 	@GET
 	@Path("{id}")
 	public Employee get(@PathParam("id") Long id) {
-		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
 		
 		final Employee employee = new Employee();
 		employee.setId(id.intValue());
@@ -81,9 +71,6 @@ public class EmployeeService {
 	
 	@POST
 	public Employee save(Employee employee) {
-		
-		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
 		
 		if ( employee.getId() == null ) {
 			
@@ -111,9 +98,6 @@ public class EmployeeService {
 	@Path("{id}")
 	public void delete(@PathParam("id") Long id) {
 
-		final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-		final PersistableDao<Employee> dao = factory.getDao(Employee.class);
-		
 		dao.delete(Employee.class, id.intValue());
 	}
 }

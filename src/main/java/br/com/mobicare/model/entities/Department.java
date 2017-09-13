@@ -2,15 +2,16 @@ package br.com.mobicare.model.entities;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table
@@ -24,8 +25,8 @@ public class Department implements Persistable {
 	private String name;
 	private Double budget;
 	
-	@Transient
-	@OneToMany(mappedBy="department",cascade=CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
+	@JsonIgnore
 	private List<Employee> employees;
 	
 	public Department() {
@@ -56,6 +57,7 @@ public class Department implements Persistable {
 		this.budget = budget;
 	}
 
+	@JsonIgnore
 	public List<Employee> getEmployees() {
 		return employees;
 	}

@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import br.com.mobicare.model.entities.Persistable;
 import br.com.mobicare.model.util.PersistenceUtil;
 
-public interface PersistableDao<P extends Persistable> {
+public interface Dao<P extends Persistable> {
 	
 	public default void save ( final P p ) {
+		
 		final EntityManager em = PersistenceUtil.getEntityManager();
 		
 		try {
@@ -24,9 +25,6 @@ public interface PersistableDao<P extends Persistable> {
 		} catch ( final Throwable t ) {
 			
 			throw new RuntimeException("An error occurred while creating object.", t);
-			
-		} finally {
-			em.close();
 		}
 	}
 	
@@ -42,9 +40,6 @@ public interface PersistableDao<P extends Persistable> {
 		} catch ( final Throwable t ) {
 
 			throw new RuntimeException("An error occurred while updating object.", t);
-			
-		} finally {
-			em.close();
 		}
 	}
 	
@@ -64,9 +59,6 @@ public interface PersistableDao<P extends Persistable> {
 		} catch ( final Throwable t ) {
 			
 			throw new RuntimeException("An error occurred while removing object.", t);
-			
-		} finally {
-			em.close();
 		}
 	}
 	
@@ -78,6 +70,7 @@ public interface PersistableDao<P extends Persistable> {
 	public default List<P> list ( final Class<P> clazz, final Integer offset, final Integer limit, final String sortFields, final String sortDirections ) {
 		
 		final EntityManager em = PersistenceUtil.getEntityManager();
+		
 		List<P> ps = null;
 		
 		try {
@@ -113,9 +106,6 @@ public interface PersistableDao<P extends Persistable> {
 		} catch ( final Throwable t ) {
 			
 			throw new RuntimeException("An error occurred while listing objects.", t);
-			
-		} finally {
-			em.close();
 		}
 		
 		return ps;
@@ -124,6 +114,7 @@ public interface PersistableDao<P extends Persistable> {
 	public default Long count ( final Class<P> clazz ) {
 		
 		final EntityManager em = PersistenceUtil.getEntityManager();
+		
 		Long count = null;
 		
 		try {
@@ -137,13 +128,13 @@ public interface PersistableDao<P extends Persistable> {
 		} catch ( final Throwable t ) {
 			
 			throw new RuntimeException("An error occurred while getting count.", t);
-			
-		} finally {
-			em.close();
 		}
 		
 		return count;
 	}
 	
 	public P get ( final P p );
+	public Long countEmpty ();
+	public List<P> listEmpty ();
+	public List<P> listEmpty ( final Integer offset, final Integer limit, final String sortFields, final String sortDirections );
 }

@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -56,6 +57,39 @@ public class DepartmentService {
 															   String sortDirections) {
 		
 		return dao.listEmpty( start, pageSize, sortFields, sortDirections );
+	}
+	
+	@GET
+	@Path("{id}")
+	public Department get(@PathParam("id") Long id) {
+		
+		final Department department = new Department();
+		department.setId(id.intValue());
+		
+		return dao.get(department);
+	}
+	
+	@POST
+	public Department save(Department department) {
+		
+		if ( department.getId() == null ) {
+			
+			final Department departmentToSave = new Department();
+			departmentToSave.setName(department.getName());
+			departmentToSave.setBudget(department.getBudget());
+			dao.save(departmentToSave);
+			department = departmentToSave;
+			
+		} else {
+			
+			final Department departmentToUpdate = get(Long.valueOf(department.getId()));
+			departmentToUpdate.setName(department.getName());
+			departmentToUpdate.setBudget(department.getBudget());
+			dao.update(departmentToUpdate);
+			department = departmentToUpdate;
+		}
+		
+		return department;
 	}
 	
 	@DELETE

@@ -65,14 +65,22 @@ app.controller('employeesListController', function ($scope, $rootScope, employee
 
 app.controller('employeesFormController', function ($scope, $rootScope, $http, employeeService) {
     
-	$scope.$on('reloaded', function () {
+	$scope.reloadDepartmentsCombo = function () {
 		$http({
 			url: 'resources/departments/list',
 			method: 'GET'
 		}).success(function (data) {
 			$scope.comboDepartments = data;
 		});
+	};
+	
+	$scope.$on('reloaded', function () {
+		$scope.reloadDepartmentsCombo();
 	});
+	
+	$rootScope.$on('reloadDepartmentsCombo', function() {
+    	$scope.reloadDepartmentsCombo();
+    });
 	
     $scope.clearForm = function () {
         $scope.employee = null;
@@ -85,7 +93,8 @@ app.controller('employeesFormController', function ($scope, $rootScope, $http, e
         employeeService.save($scope.employee).$promise.then(
             function () {
                 $rootScope.$broadcast('refreshGrid');
-                $rootScope.$broadcast('employeeSaved');
+                $rootScope.$broadcast('refreshDepartmentsGrid');
+                $rootScope.$broadcast('recordSaved');
                 
                 $scope.clearForm();
             },
@@ -102,7 +111,8 @@ app.controller('employeesFormController', function ($scope, $rootScope, $http, e
         employeeService.delete({id: id}).$promise.then(
             function () {
                 $rootScope.$broadcast('refreshGrid');
-                $rootScope.$broadcast('employeeDeleted');
+                $rootScope.$broadcast('refreshDepartmentsGrid');
+                $rootScope.$broadcast('recordDeleted');
                 
                 $scope.clearForm();
             },
@@ -115,13 +125,13 @@ app.controller('employeesFormController', function ($scope, $rootScope, $http, e
 
 app.controller('alertMessagesController', function ($scope) {
 	
-    $scope.$on('employeeSaved', function () {
+    $scope.$on('recordSaved', function () {
         $scope.alerts = [
             { type: 'success', msg: 'Record saved successfully!' }
         ];
     });
 
-    $scope.$on('employeeDeleted', function () {
+    $scope.$on('recordDeleted', function () {
         $scope.alerts = [
             { type: 'success', msg: 'Record deleted successfully!' }
         ];
@@ -151,15 +161,21 @@ app.controller('departmentsListController', function ($scope, $rootScope, depart
         useExternalSorting: true,
         sortInfo: $scope.sortInfo,
         
-        multiSelect: false,
-        selectedItems: [],
-        
         columnDefs: [
             { field: 'id', displayName: 'ID' },
             { field: 'name', displayName: 'Name' },
             { field: 'budget', displayName: 'Budget' },
             { field: '', width: 30, cellTemplate: '<span class="glyphicon glyphicon-remove remove" ng-click="deleteRow(row)"></span>' }
-        ]
+        ],
+
+        multiSelect: false,
+        selectedItems: [],
+        
+        afterSelectionChange: function (rowItem) {
+            if (rowItem.selected) {
+                $rootScope.$broadcast('departmentSelected', $scope.departmentsGrid.selectedItems[0].id);
+            }
+        }
     };
 
     $scope.refreshDepartmentsGrid = function () {
@@ -173,19 +189,9 @@ app.controller('departmentsListController', function ($scope, $rootScope, depart
             $scope.departments = data;
         });
     };
-
+    
     $scope.deleteRow = function (row) {
-        departmentService.delete({id: row.entity.id}).$promise.then(
-            function () {
-                $scope.$broadcast('refreshDepartmentsGrid');
-                $rootScope.$broadcast('departmentDeleted');
-                
-                $scope.clearForm();
-            },
-            function () {
-                $rootScope.$broadcast('error');
-            }
-        );
+        $rootScope.$broadcast('deleteDepartment', row.entity.id);
     };
 
     $scope.$watch('sortInfo', function () {
@@ -193,20 +199,59 @@ app.controller('departmentsListController', function ($scope, $rootScope, depart
         $scope.refreshDepartmentsGrid();
     }, true);
     
-    $scope.$on('employeeSaved', function() {
-    	$scope.refreshDepartmentsGrid();
-    });
-    
     $scope.$on('ngGridEventSorted', function (event, sortInfo) {
         $scope.sortInfo = sortInfo;
     });
 
-    $scope.$on('refreshDepartmentsGrid', function () {
+    $rootScope.$on('refreshDepartmentsGrid', function () {
         $scope.refreshDepartmentsGrid();
     });
 
-    $scope.$on('clear', function () {
+    $scope.$on('clearDepartment', function () {
         $scope.departmentsGrid.selectAll(false);
+    });
+});
+
+app.controller('departmentsFormController', function ($scope, $rootScope, departmentService) {
+    	
+    $scope.clearForm = function () {
+        $scope.department = null;
+        $scope.departmentForm.$setPristine();
+        
+        $rootScope.$broadcast('clearDepartment');
+    };
+
+    $scope.updateDepartment = function () {
+        departmentService.save($scope.department).$promise.then(
+            function () {
+                $rootScope.$broadcast('refreshDepartmentsGrid');
+                $rootScope.$broadcast('reloadDepartmentsCombo');
+                $rootScope.$broadcast('recordSaved');
+                
+                $scope.clearForm();
+            },
+            function () {
+                $rootScope.$broadcast('error');
+            });
+    };
+
+    $scope.$on('departmentSelected', function (event, id) {
+        $scope.department = departmentService.get({id: id});
+    });
+
+    $scope.$on('deleteDepartment', function (event, id) {
+    	departmentService.delete({id: id}).$promise.then(
+            function () {
+                $rootScope.$broadcast('refreshDepartmentsGrid');
+                $rootScope.$broadcast('reloadDepartmentsCombo');
+                $rootScope.$broadcast('recordDeleted');
+                
+                $scope.clearForm();
+            },
+            function () {
+                $rootScope.$broadcast('error');
+            }
+        );
     });
 });
 

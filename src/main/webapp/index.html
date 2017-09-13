@@ -113,6 +113,54 @@
 			
 		</div>
 		
+		<div class="form" ng-controller="departmentsFormController">
+			
+			<div ng-if="department.id == null">
+				<h3>Add Department</h3>
+			</div>
+			
+			<div ng-if="department.id != null">
+				<h3>Edit Department</h3>
+			</div>
+			
+			<div>
+				<form name="departmentForm" ng-submit="updateDepartment()" novalidate>
+					
+					<div class="form-group" ng-class="{'has-error' : departmentForm.name.$invalid && departmentForm.name.$dirty}">
+						<label for="name">Name:</label>
+						<span ng-class="{'glyphicon glyphicon-ok' : departmentForm.name.$valid && departmentForm.name.$dirty}"></span>
+						
+						<input id="name" name="name" type="text" class="form-control" maxlength="30"
+								ng-model="department.name"
+								required ng-minlength="2" ng-maxlength="30"/>
+						
+						<p class="help-block" ng-show="departmentForm.name.$error.required">Add Name.</p>
+						<p class="help-block" ng-show="departmentForm.name.$error.minlength">Name must be at least 2 characters long.</p>
+						<p class="help-block" ng-show="departmentForm.name.$error.maxlength">Name cannot be longer than 30 characters.</p>
+					</div>
+					
+					<div class="form-group" ng-class="{'has-error' : departmentForm.budget.$invalid && departmentForm.budget.$dirty}">
+						<label for="budget">Budget:</label>
+						<span ng-class="{'glyphicon glyphicon-ok' : departmentForm.budget.$valid && departmentForm.budget.$dirty}"></span>
+						
+						<input id="budget" name="budget" type="number" class="form-control" maxlength="11"
+								ng-model="department.budget"
+								required ng-maxlength="8"/>
+						
+						<p class="help-block" ng-show="departmentForm.budget.$error.required">Add Budget.</p>
+						<p class="help-block" ng-show="departmentForm.budget.$error.maxlength">Budget cannot be longer than 11 digits.</p>
+					</div>
+					
+					<div class="buttons">
+						<button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
+						<button type="submit" class="btn btn-primary" ng-disabled="departmentForm.$invalid">Save</button>
+					</div>
+					
+				</form>
+			</div>
+			
+		</div>
+		
 	</body>
 
 </html>

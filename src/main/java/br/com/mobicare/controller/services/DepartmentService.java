@@ -24,8 +24,7 @@ import br.com.mobicare.model.entities.Department;
 @Produces(MediaType.APPLICATION_JSON)
 public class DepartmentService {
 	
-	final DaoFactory<Department> factory = new DaoFactory<Department>();
-	final Dao<Department> dao = factory.getDao(Department.class);
+	private static final Dao<Department> dao = DaoFactory.getDao(Department.class);
 	
 	@GET
 	@Path("list")

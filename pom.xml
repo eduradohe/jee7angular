@@ -4,7 +4,7 @@
   
   <groupId>com.br.mobicare</groupId>
   <artifactId>java-pleno-eduardo-turella</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>war</packaging>
   
   <name>java-pleno-eduardo-turella</name>
@@ -46,26 +46,6 @@
         </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>${version.plugin.enforcer}</version>
-            <executions>
-                <execution>
-                    <id>enforce-maven</id>
-                    <goals>
-                        <goal>enforce</goal>
-                    </goals>
-                    <configuration>
-                        <rules>
-                            <requireJavaVersion>
-                                <version>${java.version}</version>
-                            </requireJavaVersion>
-                        </rules>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-war-plugin</artifactId>
             <version>${version.plugin.war}</version>
             <configuration>
@@ -80,20 +60,6 @@
             <configuration>
                 <noDeploy>true</noDeploy>
             </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.zeroturnaround</groupId>
-            <artifactId>jrebel-maven-plugin</artifactId>
-            <version>${version.plugin.jrebel}</version>
-            <executions>
-                <execution>
-                    <id>generate-rebel-xml</id>
-                    <phase>process-resources</phase>
-                    <goals>
-                        <goal>generate</goal>
-                    </goals>
-                </execution>
-            </executions>
         </plugin>
         <plugin>
             <groupId>org.wildfly.plugins</groupId>
@@ -163,11 +129,6 @@
     	<artifactId>javaee-api</artifactId>
     	<version>${version.dependency.javaee}</version>
     	<scope>provided</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.reflections</groupId>
-    	<artifactId>reflections</artifactId>
-    	<version>0.9.11</version>
     </dependency>
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>

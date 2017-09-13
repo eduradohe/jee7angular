@@ -24,8 +24,7 @@ import br.com.mobicare.model.entities.Employee;
 @Produces(MediaType.APPLICATION_JSON)
 public class EmployeeService {
 	
-	final DaoFactory<Employee> factory = new DaoFactory<Employee>();
-	final Dao<Employee> dao = factory.getDao(Employee.class);
+	private static final Dao<Employee> dao = DaoFactory.getDao(Employee.class);
 	
 	@GET
 	@Path("list")

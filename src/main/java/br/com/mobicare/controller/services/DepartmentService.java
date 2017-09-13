@@ -25,6 +25,13 @@ public class DepartmentService {
 	
 	final DaoFactory<Department> factory = new DaoFactory<Department>();
 	final Dao<Department> dao = factory.getDao(Department.class);
+	
+	@GET
+	@Path("list")
+	public List<Department> list() {
+		
+		return dao.list(Department.class);
+	}
     
 	@GET
 	@Path("countEmpty")

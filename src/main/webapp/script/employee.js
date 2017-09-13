@@ -192,7 +192,11 @@ app.controller('departmentsListController', function ($scope, $rootScope, depart
         $scope.departments = {currentPage: 1};
         $scope.refreshDepartmentsGrid();
     }, true);
-
+    
+    $scope.$on('employeeSaved', function() {
+    	$scope.refreshDepartmentsGrid();
+    });
+    
     $scope.$on('ngGridEventSorted', function (event, sortInfo) {
         $scope.sortInfo = sortInfo;
     });
